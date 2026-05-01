@@ -47,15 +47,15 @@ The agent:
 ### Tools Implemented
 
 1. Log Interaction
-	- Parses free text using the deterministic parser or LLM-backed parser
-	- Extracts doctor, product, and interest
-	- Saves the record to the database
+   - Parses free text using the deterministic parser or LLM-backed parser
+   - Extracts doctor, product, and interest
+   - Saves the record to the database
 
 2. Edit Interaction
-	- Updates the latest interaction record
+   - Updates the latest interaction record
 
 3. Fetch Interaction History
-	- Retrieves structured past interactions
+   - Retrieves structured past interactions
 
 LangGraph acts as the orchestration layer connecting user input to backend operations.
 
