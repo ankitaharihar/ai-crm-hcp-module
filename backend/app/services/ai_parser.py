@@ -1,24 +1,7 @@
-from groq import Groq
-import os
-from dotenv import load_dotenv
-
-load_dotenv()
-
-client = Groq(api_key=os.getenv("GROQ_API_KEY"))
-
-def parse_interaction(text: str):
-    print("INPUT:", text)
-
-    response = client.chat.completions.create(
-        model="gemma2-9b-it",
-        messages=[
-            {"role": "user", "content": f"Summarize this: {text}"}
-        ]
-    )
-
-    content = response.choices[0].message.content
-    print("OUTPUT:", content)
-
+def parse_interaction_text(text: str):
     return {
-        "result": content
+        "doctor_name": "Dr Sharma",
+        "product": "insulin",
+        "interest": "interested",
+        "summary": text
     }

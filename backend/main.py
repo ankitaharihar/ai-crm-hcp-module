@@ -1,9 +1,7 @@
 from fastapi import FastAPI
-from app.services.ai_parser import parse_interaction
-from pydantic import BaseModel
+from app.services.ai_parser import parse_interaction_text
 
-from app.schemas import InteractionCreate 
-from app.services.ai_parser import parse_interaction
+from app.schemas import InputText
 
 app = FastAPI(title="AI-First CRM API")
 
@@ -14,11 +12,5 @@ def health_check() -> dict[str, str]:
 
 
 @app.post("/interactions/parse")
-def parse_interaction(payload: InteractionCreate) -> dict:
-    structured_data = parse_interaction_text(payload.notes)
-    return {"input": payload.model_dump(), "parsed": structured_data}
-class InputText(BaseModel):
-    text: str
-@app.post("/interactions/parse")
 def parse(data: InputText):
-    return parse_interaction(data.text)
+    return parse_interaction_text(data.text)

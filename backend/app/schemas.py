@@ -1,7 +1,5 @@
-from pydantic import BaseModel, Field
+from pydantic import BaseModel
 
 
-class InteractionCreate(BaseModel):
-    hcp_name: str = Field(min_length=1)
-    notes: str = Field(min_length=1)
-    interaction_type: str = Field(default="general")
+class InputText(BaseModel):
+    text: str
