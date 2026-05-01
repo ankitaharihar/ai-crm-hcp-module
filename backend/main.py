@@ -16,8 +16,8 @@ def health_check() -> dict[str, str]:
 
 
 @app.get("/agent-test")
-def test_agent():
-    return app_graph.invoke({"input": "test"})
+def test_agent(input: str = "test"):
+    return app_graph.invoke({"input": input})
 
 
 @app.post("/interactions/parse")
