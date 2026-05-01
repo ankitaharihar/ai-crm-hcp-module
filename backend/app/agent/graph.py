@@ -27,7 +27,38 @@ def agent_node(state: AgentState):
 
         if "history" in text or "show" in text:
             data = db.query(Interaction).all()
-            return {"output": {"action": "fetch", "data": [item.summary for item in data]}}
+            return {
+                "output": {
+                    "action": "fetch",
+                    "data": [
+                        {
+                            "doctor": item.doctor_name,
+                            "product": item.product,
+                            "interest": item.interest,
+                            "summary": item.summary,
+                last = db.query(Interaction).order_by(Interaction.id.desc()).first()
+
+                if not last:
+                    return {"output": {"action": "edit", "message": "No interaction found"}}
+
+                last.summary = "Updated interaction via AI agent"
+                db.commit()
+                db.refresh(last)
+
+                return {
+                    "output": {
+                        "action": "edit",
+                        "message": "Last interaction updated",
+                        "data": {
+                            "id": last.id,
+                            "summary": last.summary,
+                        },
+                    }
+                }
+                        for item in data
+                    ],
+                }
+            }
 
         if "edit" in text:
             return {"output": {"action": "edit", "message": "edit coming soon"}}
