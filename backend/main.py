@@ -1,5 +1,6 @@
 from fastapi import FastAPI
 from app.services.ai_parser import parse_interaction_text
+from app.agent.graph import app_graph
 
 from app.database import Base, SessionLocal, engine
 from app.models import Interaction
@@ -14,9 +15,24 @@ def health_check() -> dict[str, str]:
     return {"status": "ok"}
 
 
+@app.get("/agent-test")
+def test_agent():
+    return app_graph.invoke({"input": "test"})
+
+
 @app.post("/interactions/parse")
 def parse(data: InputText):
-    return parse_interaction_text(data.text)
+    parsed = parse_interaction_text(data.text)
+
+    db = SessionLocal()
+    try:
+        interaction = Interaction(**parsed)
+        db.add(interaction)
+        db.commit()
+        db.refresh(interaction)
+        return interaction
+    finally:
+        db.close()
 
 
 @app.post("/interactions/save")
@@ -28,6 +44,15 @@ def save_interaction(data: InteractionCreate):
         db.commit()
         db.refresh(interaction)
         return interaction
+    finally:
+        db.close()
+
+
+@app.get("/interactions")
+def get_interactions():
+    db = SessionLocal()
+    try:
+        return db.query(Interaction).all()
     finally:
         db.close()
 
